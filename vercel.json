@@ -1,4 +1,20 @@
 {
-  "buildCommand": "next build",
-  "framework": "nextjs"
-} 
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "PLANETARY_API_URL": "https://naksh.jarvis.datagraph.in/birth-chart",
+    "OPENAI_API_KEY": "@openai-api-key"
+  }
+}
