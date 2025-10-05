@@ -20,7 +20,7 @@ contract ZodiacNFT is ERC721, ERC721URIStorage, Ownable {
         "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
     ];
 
-    constructor() ERC721("Astrobase Zodiac NFT", "AZN") {}
+    constructor(address initialOwner) ERC721("Astrobase Zodiac NFT", "AZN") Ownable(initialOwner) {}
 
     // Function to set the token URI for a specific zodiac sign (only owner can call)
     function setZodiacTokenURI(string memory sign, string memory tokenURI) public onlyOwner {
