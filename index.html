@@ -86,12 +86,18 @@
                 <button id="mint-nft-btn" class="w-full px-4 py-3 mt-6 font-bold text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-gray-800">
                     Mint My NFT
                 </button>
+                 <p id="mint-status" class="text-sm text-center text-blue-400 mt-2"></p>
             </div>
         </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.2.0/dist/ethers.umd.min.js"></script>
     <script>
+        // --- Smart Contract Details ---
+        const contractAddress = "0xA3C8FC43aa968d0000944fe8218eDb7a8825327c";
+        const contractAbi = JSON.parse('[{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"address","name":"owner","type":"address"}],"name":"ERC721IncorrectOwner","type":"error"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ERC721InsufficientApproval","type":"error"},{"inputs":[{"internalType":"address","name":"approver","type":"address"}],"name":"ERC721InvalidApprover","type":"error"},{"inputs":[{"internalType":"address","name":"operator","type":"address"}],"name":"ERC721InvalidOperator","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"ERC721InvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"}],"name":"ERC721InvalidReceiver","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"}],"name":"ERC721InvalidSender","type":"error"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ERC721NonexistentToken","type":"error"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"string","name":"zodiacSign","type":"string"}],"name":"mintZodiacNFT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_fromTokenId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"_toTokenId","type":"uint256"}],"name":"BatchMetadataUpdate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_tokenId","type":"uint256"}],"name":"MetadataUpdate","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"sign","type":"string"},{"internalType":"string","name":"tokenURI","type":"string"}],"name":"setZodiacTokenURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"zodiacSigns","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}]');
+
+        // --- DOM Elements ---
         const formStage = document.getElementById('form-stage');
         const chatStage = document.getElementById('chat-stage');
         const birthForm = document.getElementById('birth-form');
@@ -99,16 +105,15 @@
         const formError = document.getElementById('form-error');
         const placeInput = document.getElementById('place');
         const placeSuggestions = document.getElementById('place-suggestions');
-
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatHistory = document.getElementById('chat-history');
-
         const claimNftBtn = document.getElementById('claim-nft-btn');
         const nftModal = document.getElementById('nft-modal');
         const closeModalBtn = document.getElementById('close-modal-btn');
         const mintNftBtn = document.getElementById('mint-nft-btn');
         const astroSignEl = document.getElementById('astro-sign');
+        const mintStatus = document.getElementById('mint-status');
 
         let planetaryPositions = null;
 
@@ -120,15 +125,11 @@
                 placeSuggestions.classList.add('hidden');
                 return;
             }
-
-            // NOTE: Replace 'demo' with your own free GeoNames username for production use.
             const url = `https://secure.geonames.org/searchJSON?q=${encodeURIComponent(query)}&maxRows=5&username=demo`;
-
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 placeSuggestions.innerHTML = '';
-
                 if (data.geonames && data.geonames.length > 0) {
                     data.geonames.forEach(place => {
                         const suggestionDiv = document.createElement('div');
@@ -164,33 +165,26 @@
             formError.textContent = '';
             generateBtn.disabled = true;
             generateBtn.textContent = 'Generating...';
-
             const data = {
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
                 place: placeInput.value,
             };
-
             try {
                 const response = await fetch('/api/generate-chart', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                 });
-
                 if (!response.ok) {
                     const errData = await response.json();
                     throw new Error(errData.error || 'Failed to generate chart.');
                 }
-
                 planetaryPositions = await response.json();
-                
-                // Transition to chat
                 formStage.classList.add('hidden');
                 chatStage.classList.remove('hidden');
                 chatStage.classList.add('flex');
                 addMessage('assistant', 'Your chart is ready. Feel free to ask me anything about your destiny.');
-
             } catch (error) {
                 formError.textContent = `Error: ${error.message}`;
             } finally {
@@ -204,27 +198,22 @@
             e.preventDefault();
             const userQuestion = chatInput.value.trim();
             if (!userQuestion) return;
-
             addMessage('user', userQuestion);
             chatInput.value = '';
             showTypingIndicator();
-
             try {
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ planetaryPositions, userQuestion }),
                 });
-
                 if (!response.ok) {
                     const errData = await response.json();
                     throw new Error(errData.error || 'Failed to get a response.');
                 }
-
                 const { answer } = await response.json();
                 removeTypingIndicator();
                 addMessage('assistant', answer);
-
             } catch (error) {
                 removeTypingIndicator();
                 addMessage('assistant', `Sorry, an error occurred: ${error.message}`);
@@ -236,6 +225,9 @@
             if (planetaryPositions && planetaryPositions.sun) {
                 astroSignEl.textContent = planetaryPositions.sun.sign;
             }
+            mintStatus.textContent = '';
+            mintNftBtn.disabled = false;
+            mintNftBtn.textContent = 'Mint My NFT';
             nftModal.classList.remove('hidden');
             nftModal.classList.add('flex');
         });
@@ -245,17 +237,64 @@
             nftModal.classList.remove('flex');
         });
 
-        mintNftBtn.addEventListener('click', () => {
-            alert('Congratulations! Your unique Astrobase NFT has been minted.');
-            nftModal.classList.add('hidden');
-            nftModal.classList.remove('flex');
+        mintNftBtn.addEventListener('click', async () => {
+            mintStatus.textContent = '';
+            if (typeof window.ethers === 'undefined') {
+                mintStatus.textContent = 'Error: Ethers.js library not loaded. Please check your network connection or try refreshing the page.';
+                return;
+            }
+
+            if (typeof window.ethereum === 'undefined') {
+                mintStatus.textContent = 'Please install MetaMask to mint an NFT.';
+                return;
+            }
+
+            try {
+                mintNftBtn.disabled = true;
+                mintNftBtn.textContent = 'Connecting Wallet...';
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+
+                const zodiacSign = astroSignEl.textContent;
+                if (!zodiacSign) {
+                    throw new Error("Zodiac sign not found.");
+                }
+
+                mintNftBtn.textContent = 'Confirm in Wallet...';
+                mintStatus.textContent = "Minting your NFT... please wait.";
+
+                const tx = await contract.mintZodiacNFT(userAddress, zodiacSign);
+                await tx.wait();
+
+                mintStatus.innerHTML = `Success! NFT minted. <a href="https://goerli.basescan.org/tx/${tx.hash}" target="_blank" class="text-purple-400 hover:underline">View Transaction</a>`;
+                mintNftBtn.textContent = 'Minted!';
+
+            } catch (error) {
+                console.error("Minting failed:", error);
+                let errorMessage = "Transaction failed.";
+                if (error.data && error.data.message) {
+                    errorMessage = error.data.message;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                // Simplify common contract errors
+                if (errorMessage.includes("already minted")) {
+                    errorMessage = "You have already minted a Zodiac NFT with this wallet.";
+                }
+                mintStatus.textContent = `Error: ${errorMessage}`;
+                mintNftBtn.disabled = false;
+                mintNftBtn.textContent = 'Mint My NFT';
+            }
         });
 
         function addMessage(sender, text) {
             const messageElement = document.createElement('div');
             const alignment = sender === 'user' ? 'justify-end' : 'justify-start';
             const bgColor = sender === 'user' ? 'bg-purple-600' : 'bg-gray-700';
-            
             messageElement.className = `flex ${alignment}`;
             messageElement.innerHTML = `<div class="max-w-xs md:max-w-md lg:max-w-lg px-4 py-2 rounded-lg ${bgColor}">${text}</div>`;
             chatHistory.appendChild(messageElement);
